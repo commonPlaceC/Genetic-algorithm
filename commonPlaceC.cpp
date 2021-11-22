@@ -20,7 +20,7 @@ int fitness(person &unit) {
 void createNewPopulation(populations &population_)
 {
 	srand((int)time(NULL));
-	for (int i = 0; i < 1000; i++) {
+	for (int i = 0; i < 5000; i++) {
 		population_.push_back(make_tuple(rand() % 500, rand() % 500, rand() % 500));
 	}
 }
@@ -32,15 +32,15 @@ void geneCrossing(populations &population_, person unit1, person unit2) {
 	population_.push_back(make_tuple(get<0>(unit1), get<1>(unit1), get<2>(unit2)));
 	population_.push_back(make_tuple(get<0>(unit2), get<1>(unit1), get<2>(unit1)));
 	population_.push_back(make_tuple(get<0>(unit2), get<1>(unit2), get<2>(unit1)));
-	//--
-	population_.push_back(make_tuple(rand() % 500, get<1>(unit1), get<2>(unit2)));
-	population_.push_back(make_tuple(rand() % 500, get<1>(unit2), get<2>(unit1)));
-	//--
-	population_.push_back(make_tuple(get<0>(unit1), rand() % 500, get<2>(unit2)));
-	population_.push_back(make_tuple(get<0>(unit2), rand() % 500, get<2>(unit1)));
-	//--
-	population_.push_back(make_tuple(get<0>(unit1), get<1>(unit2), rand() % 500));
-	population_.push_back(make_tuple(get<0>(unit2), get<1>(unit1), rand() % 500));
+	// //--
+	// population_.push_back(make_tuple(rand() % 500, get<1>(unit1), get<2>(unit2)));
+	// population_.push_back(make_tuple(rand() % 500, get<1>(unit2), get<2>(unit1)));
+	// //--
+	// population_.push_back(make_tuple(get<0>(unit1), rand() % 500, get<2>(unit2)));
+	// population_.push_back(make_tuple(get<0>(unit2), rand() % 500, get<2>(unit1)));
+	// //--
+	// population_.push_back(make_tuple(get<0>(unit1), get<1>(unit2), rand() % 500));
+	// population_.push_back(make_tuple(get<0>(unit2), get<1>(unit1), rand() % 500));
 
 }
 
@@ -53,7 +53,7 @@ void reproduction(populations &population_) {
 	}
 	sort(population_.begin(), population_.end(), [](person unit1, person unit2) { return fitness(unit1) > fitness(unit2); });
 
-	while (population_.size() > 1000){
+	while (population_.size() > 5000){
 		population_.pop_back();
 	}
 }

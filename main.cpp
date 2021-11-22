@@ -5,66 +5,72 @@
 
 using namespace std;
 
-using chelik = tuple<int, int, int, int>;
-using massiv_chelikov = vector<chelik>;
+using person = tuple<int, int, int>;
+using populations = vector<person>;
 
 
-int func(chelik& unit) {
-	if (get<2>(unit) != get<3>(unit))
-		return ((get<0>(unit) * get<1>(unit)) + get<0>(unit)) / ((get<2>(unit) - get<3>(unit)));
+//Функция
+int fitness(person &unit) {
+	if (get<1>(unit) != 0) 
+		return ((get<0>(unit) - get<2>(unit)) / (2 * get<1>(unit))); // (x - z) / 2 * y
 }
+
 
 //Создание первой популяции
-void randomizer(massiv_chelikov& population) {
+void createNewPopulation(populations &population_)
+{
 	srand((int)time(NULL));
-	for (int i = 0; i < 500; i++) {
-		population.push_back(make_tuple(rand() % 100, rand() % 100, rand() % 100, rand() % 100));
+	for (int i = 0; i < 1000; i++) {
+		population_.push_back(make_tuple(rand() % 500, rand() % 500, rand() % 500));
 	}
 }
 
-//Скрещивание 
-void reproduction(massiv_chelikov& population, chelik unit1, chelik unit2) {
+//Скрещивание генов
+void geneCrossing(populations &population_, person unit1, person unit2) {
+	srand((int)time(NULL)); 
+	population_.push_back(make_tuple(get<0>(unit1), get<1>(unit2), get<2>(unit2)));
+	population_.push_back(make_tuple(get<0>(unit1), get<1>(unit1), get<2>(unit2)));
+	population_.push_back(make_tuple(get<0>(unit2), get<1>(unit1), get<2>(unit1)));
+	population_.push_back(make_tuple(get<0>(unit2), get<1>(unit2), get<2>(unit1)));
+	//--
+	population_.push_back(make_tuple(rand() % 500, get<1>(unit1), get<2>(unit2)));
+	population_.push_back(make_tuple(rand() % 500, get<1>(unit2), get<2>(unit1)));
+	//--
+	population_.push_back(make_tuple(get<0>(unit1), rand() % 500, get<2>(unit2)));
+	population_.push_back(make_tuple(get<0>(unit2), rand() % 500, get<2>(unit1)));
+	//--
+	population_.push_back(make_tuple(get<0>(unit1), get<1>(unit2), rand() % 500));
+	population_.push_back(make_tuple(get<0>(unit2), get<1>(unit1), rand() % 500));
 
-	population.push_back(make_tuple(get<0>(unit2), get<1>(unit1), get<2>(unit1), get<3>(unit1)));
-	population.push_back(make_tuple(get<0>(unit2), get<1>(unit2), get<2>(unit1), get<3>(unit1)));
-	population.push_back(make_tuple(get<0>(unit2), get<1>(unit2), get<2>(unit2), get<3>(unit1)));
-
-    population.push_back(make_tuple(get<0>(unit1), get<1>(unit2), get<2>(unit2), get<3>(unit2)));
-	population.push_back(make_tuple(get<0>(unit1), get<1>(unit1), get<2>(unit2), get<3>(unit2)));
-	population.push_back(make_tuple(get<0>(unit1), get<1>(unit1), get<2>(unit1), get<3>(unit2)));
 }
 
-
-//Функция размножения 
-void procreation(massiv_chelikov& population) {
+//Размножение
+void reproduction(populations &population_) {
 	srand((int)time(NULL));
-	size_t size_ = population.size();
+	size_t size_ = population_.size();
 	for (int i = 0; i < size_; i++) {
-		reproduction(population, population[rand() % population.size()], population[rand() % population.size()]);
+		geneCrossing(population_, population_[rand() % population_.size()], population_[rand() % population_.size()]);
 	}
-	sort(population.begin(), population.end(), [](chelik unit1, chelik unit2) {return func(unit1) < func(unit2); });
-	while (population.size() > 500) {
-		population.erase(population.begin());
+	sort(population_.begin(), population_.end(), [](person unit1, person unit2) { return fitness(unit1) > fitness(unit2); });
+
+	while (population_.size() > 1000){
+		population_.pop_back();
 	}
 }
 
 
-
+//Главная функция
 int main() {
-	massiv_chelikov population;
-	randomizer(population);
+	populations population_;
+	createNewPopulation(population_);
 
-	int step = 100;
-	while (step) {
-		procreation(population);
-		step--;
+	int try_ = 100;
+	while (try_) {
+		reproduction(population_);
+		try_--;
 	}
-	int count = 0;
-	for (int i = 0; i < population.size(); i++) {
-		cout << func(population[i]) << endl;
-		count++;
-	}
+	cout << fitness(population_[population_.size() - 1]) << endl;
 	cout << endl;
-	cout << get<0>(population[population.size() - 1]) << " " << get<1>(population[population.size() - 1]) << " " << get<2>(population[population.size() - 1]) << " " << get<3>(population[population.size() - 1]) << endl;
+	cout << get<0>(population_[population_.size() - 1]) << " " << get<1>(population_[population_.size() - 1]) << " " << get<2>(population_[population_.size() - 1]);
 	return 0;
 }

@@ -9,16 +9,15 @@ using chelik = tuple<int, int, int, int>;
 using massiv_chelikov = vector<chelik>;
 
 
-double func(chelik& unit) {
+int func(chelik& unit) {
 	if (get<2>(unit) != get<3>(unit))
 		return ((get<0>(unit) * get<1>(unit)) + get<0>(unit)) / ((get<2>(unit) - get<3>(unit)));
 }
 
-
 //Создание первой популяции
 void randomizer(massiv_chelikov& population) {
 	srand((int)time(NULL));
-	for (int i = 0; i < 100; i++) {
+	for (int i = 0; i < 500; i++) {
 		population.push_back(make_tuple(rand() % 100, rand() % 100, rand() % 100, rand() % 100));
 	}
 }
@@ -44,7 +43,7 @@ void procreation(massiv_chelikov& population) {
 		reproduction(population, population[rand() % population.size()], population[rand() % population.size()]);
 	}
 	sort(population.begin(), population.end(), [](chelik unit1, chelik unit2) {return func(unit1) < func(unit2); });
-	while (population.size() > 100) {
+	while (population.size() > 500) {
 		population.erase(population.begin());
 	}
 }
@@ -55,7 +54,7 @@ int main() {
 	massiv_chelikov population;
 	randomizer(population);
 
-	int step = 1000;
+	int step = 100;
 	while (step) {
 		procreation(population);
 		step--;

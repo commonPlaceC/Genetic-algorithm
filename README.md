@@ -6,9 +6,9 @@ University project by commonPlaceC
 
 Finding the local maximum of a functions:
 
-- <img src="src/1.png" width=30> with maximum 250 for x ∈ [-250; 250]
-- <img src="src/2.png" width=200> with maximum 63000 in x ∈ [-250; 250]
+- <img src="src/1.png" width=30> with maximum 250 for x,y,z ∈ [-250; 250]
+- <img src="src/2.png" width=200> with maximum 63000 in x,y,z ∈ [-250; 250]
 
 ---
-###How to use
+### How to use
 #### main.cpp - programme starting file

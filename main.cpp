@@ -2,9 +2,6 @@
 #include <vector>
 #include <algorithm>
 #include <tuple>
-#include <cmath>
-#include <conio.h>
-#include <windows.h>
 #include <chrono>
 
 //Определение переменых
@@ -19,10 +16,10 @@ using person = tuple<int, int, int>;
 using populations = vector<person>;
 
 
-//Создание структуры книг
+//ВВод и проверка ввода
 int userInput() {
     int num;
-    while(!(cin >> num)) {
+    while(!((cin >> num) && (num == 1 || num == 2))) {
         cin.clear();
         cin.ignore(32276,'\n');
         cout << "Wrong value! Please enter again:  ";
@@ -33,9 +30,9 @@ int userInput() {
 //Функция
 int fitness(const person &parent, const __int16 &funcNum) {
 	if (y != 0 && funcNum == 1) 
-		return (x - z) / (2 * y); // (x - z) / 2 * y  250
+		return (x - z) / (2 * y); // (x - z) / 2 * y  maximum: 250
 	else if (funcNum == 2)
-		return (z - x + x * y); // z-x + xy | z - x*(1 - y)  63000
+		return (z - x + x * y); // z-x + xy | z - x*(1 - y)  maximum: 63000
 	else
 		return INT_MIN;
 }
@@ -49,7 +46,6 @@ void createNewPopulation(populations &population_) {
 	}
 }
 
-
 //Кроссинговер
 void geneCrossing(populations &population_, person parent1, person parent2) {
 	srand((int)time(NULL)); 
@@ -59,7 +55,7 @@ void geneCrossing(populations &population_, person parent1, person parent2) {
 	population_.push_back(make_tuple(get<0>(parent2), get<1>(parent2), get<2>(parent1)));
 	//Мутации c вероятностью 25%)
 	{
-	if (rand() % 4 == 0) //Мутации c вероятностью 25%)
+	if (rand() % 4 == 0)
 		population_.push_back(make_tuple(rand() % 501 - 250, get<1>(parent1), get<2>(parent2)));
 	if (rand() % 4 == 0)
 		population_.push_back(make_tuple(rand() % 501 - 250, get<1>(parent2), get<2>(parent1)));
@@ -101,28 +97,35 @@ void reproduction(populations &population_, const __int16 &funcNum) {
 //Главная функция
 int main() {
 
-	cout << "Please enter the number of function: (1/2): ";
+	cout << "Please enter the number of function: (1/2): "; //Выбор функции
 	__int16 funcNum = userInput();
+	system("CLS");
 
 	auto start = high_resolution_clock::now();
 
 	populations population_; 
 	createNewPopulation(population_);
 
-	__int16 try_ = 120; //Количесвто итераций
+	__int16 try_ = 120; //Запуск алгоритма
 	while (try_) {
 		reproduction(population_, funcNum);
 		try_--;
 	}
 
-	cout << "\tFinal result of algorithm: " << fitness(population_[0], funcNum) << endl;
+
+	double result = fitness(population_[0], funcNum); //Вывод результатов
+	cout << "\tFinal result of algorithm: " << result << endl;
 	auto stop = high_resolution_clock::now();
 	auto time = duration_cast<milliseconds>(stop - start);
 	cout << "\tWith values: x = " << get<0>(population_[0]);
-	cout << " y = " << get<1>(population_[0]);
-	cout << " z = " << get<2>(population_[0]) << endl;
-	cout << time.count() / 1000.0 << " - seconds taken";
-
+	cout << "; y = " << get<1>(population_[0]);
+	cout << "; z = " << get<2>(population_[0]) << "\n\n";
+	cout << "\t\tStats:\n";
+	cout << time.count() / 1000.0 << " - seconds taken\t";
+	if (funcNum == 1)
+		cout <<"Accuracy - " << result / 250.0 * 100 << "%\n";
+	else 
+		cout <<"Accuracy - " << result / 63000.0 * 100 << "%\n";
 
 	return 0;
 }

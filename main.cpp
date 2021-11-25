@@ -2,6 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <tuple>
+#include <limits.h>
 #include <chrono>
 
 //Определение переменых
@@ -16,7 +17,7 @@ using person = tuple<int, int, int>;
 using populations = vector<person>;
 
 
-//ВВод и проверка ввода
+//Ввод и проверка ввода
 int userInput() {
     int num;
     while(!((cin >> num) && (num == 1 || num == 2))) {
@@ -106,17 +107,16 @@ int main() {
 	populations population_; 
 	createNewPopulation(population_);
 
-	__int16 try_ = 120; //Запуск алгоритма
+	__int16 try_ = 150; //Запуск алгоритма
 	while (try_) {
 		reproduction(population_, funcNum);
 		try_--;
 	}
-
+	auto stop = high_resolution_clock::now();
+	auto time = duration_cast<milliseconds>(stop - start);
 
 	double result = fitness(population_[0], funcNum); //Вывод результатов
 	cout << "\tFinal result of algorithm: " << result << endl;
-	auto stop = high_resolution_clock::now();
-	auto time = duration_cast<milliseconds>(stop - start);
 	cout << "\tWith values: x = " << get<0>(population_[0]);
 	cout << "; y = " << get<1>(population_[0]);
 	cout << "; z = " << get<2>(population_[0]) << "\n\n";

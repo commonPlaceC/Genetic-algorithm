@@ -18,8 +18,8 @@ using populations = vector<person>;
 
 
 //Ввод и проверка ввода
-int userInput() {
-    int num;
+__int16 userInput() {
+    __int16 num;
     while(!((cin >> num) && (num == 1 || num == 2))) {
         cin.clear();
         cin.ignore(32276,'\n');
@@ -79,7 +79,7 @@ void selection(populations &population_, const __int16 &funcNum) {
 }
 
 //Размножение
-void reproduction(populations &population_, const __int16 &funcNum) {
+void reproduction(populations &population_, const __int8 &funcNum) {
 
 	srand((int)time(NULL));
 	size_t size_ = population_.size();
@@ -104,7 +104,7 @@ int main() {
 	populations population_; 
 	createNewPopulation(population_);
 
-	__int16 try_ = 150; //Запуск алгоритма
+	__int8 try_ = 150; //Запуск алгоритма
 	while (try_) {
 		reproduction(population_, funcNum);
 		try_--;

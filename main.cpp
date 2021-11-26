@@ -55,7 +55,6 @@ void geneCrossing(populations &population_, person parent1, person parent2) {
 	population_.push_back(make_tuple(get<0>(parent2), get<1>(parent1), get<2>(parent1)));
 	population_.push_back(make_tuple(get<0>(parent2), get<1>(parent2), get<2>(parent1)));
 	//Мутации c вероятностью 25%)
-	{
 	if (rand() % 4 == 0)
 		population_.push_back(make_tuple(rand() % 501 - 250, get<1>(parent1), get<2>(parent2)));
 	if (rand() % 4 == 0)
@@ -68,8 +67,6 @@ void geneCrossing(populations &population_, person parent1, person parent2) {
 		population_.push_back(make_tuple(get<0>(parent1), get<1>(parent2), rand() % 501 - 250));
 	if (rand() % 4 == 0)
 		population_.push_back(make_tuple(get<0>(parent2), get<1>(parent1), rand() % 501 - 250));
-	}
-
 }
 
 //Селекция
